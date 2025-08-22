@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Card Info Test</title>
+  <meta http-equiv="Content-Security-Policy" content="connect-src 'self' http://localhost:8080;">
+  <style>
+    .hidden { display: none; }
+    body { font-family: sans-serif; margin: 2em; }
+    pre { background: #f4f4f4; padding: 1em; }
+  </style>
+</head>
+<body>
+  <h1>Test /cardInfo POST</h1>
+  <form id="landFrom" action="http://localhost:8080/cardInfo" method="post">
+    <input type="hidden" name="i" value="ABC123">
+    <input type="hidden" name="l" value="en_GB">
+    <button id="landSubmit" type="submit">Submit</button>
+  </form>
+  <div id="result"></div>
+  <script>
+    document.getElementById('landFrom').onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const params = new URLSearchParams();
+      for (const [key, value] of data.entries()) params.append(key, value);
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params
+      });
+      const html = await res.text();
+      document.getElementById('result').innerHTML = html;
+    };
+  </script>
+</body>
+</html>

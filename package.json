@@ -1,0 +1,26 @@
+{
+  "name": "hack-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+  "test": "node scripts/playwright.test.js",
+  "start": "node server.js",
+  "proxy": "node proxy-server.js",
+  "dev:install": "./scripts/dev.sh install",
+  "dev:start": "./scripts/dev.sh start",
+  "dev:status": "./scripts/dev.sh status",
+  "dev:logs": "./scripts/dev.sh logs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0",
+    "selenium-webdriver": "^4.23.0"
+  }
+}

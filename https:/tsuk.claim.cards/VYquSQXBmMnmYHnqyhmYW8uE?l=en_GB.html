@@ -1,0 +1,95 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="robots" content="noindex,nofollow">
+
+
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Tesco Gift Card Page</title>
+		<link type="text/css" rel="stylesheet" href="../webresources/css/bootstrap.css" media="all" />
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+		<link type="text/css" rel="stylesheet" href="../webresources/tsuk/css/tsuk.css" media="all" />
+		<script type="text/javascript" src="../webresources/js/jquery-3.2.1.slim.min.js" ></script>
+		<script type="text/javascript" src="../webresources/js/bootstrap.js" ></script>
+		<script type="text/javascript" src="../webresources/js/popper.min.js" ></script>
+		<link rel="icon" type="image/x-icon" href="../webresources/tsuk/images/favicon.ico" />
+	</head>
+	<body>
+		<div class="navBar">
+        <a class="nav-link navElement" href="https://www.tesco.com/store-locator">Store locator </a>
+        <a class="nav-link navElement" href="https://www.tesco.com/help/in-store-faq/">Help</a>
+        </div>
+		
+<div class="navbar-logo">
+	<img alt="Logo" class="logo" src="/webresources/tsuk/images/TGC_Logo.jpg" />
+</div>
+		<div class="container content">
+		<div class="row">
+			<div class="col">
+			<div class="row justify-content-center text-left mb-5">
+	<div class="col-10 col-lg-8 col-xl-7 welcomeHeader">
+		<h1> Great news.</h1>
+	</div>
+	<div class="col-10 col-lg-8 col-xl-7 welcomeMessage">
+		You've been sent a Tesco Digital Gift Card.
+		To get your Gift Card simply click the link below.
+	</div>
+</div>
+			<div class="row hidden" id="bad">
+	<div class="col text-center">reCAPTCHA not completed. Please try again.</div>
+</div>
+			<form id="landFrom" action="https://tsuk.claim.cards/VYquSQXBmMnmYHnqyhmYW8uE/cardInfo?i=&amp;l=en_GB" method="post">
+				<div class="row">
+					<div class="mx-auto col-10 col-lg-8 col-xl-7">
+						<div class='g-recaptcha' data-sitekey='6LdosrkhAAAAAAINaMj3R42v5U6X6R8qpFa5dQOX'></div><script type='text/javascript' src='https://www.google.com/recaptcha/api.js?hl=en_GB'></script>
+					</div>
+				</div>
+				<div class="hidden">
+					<button id="landSubmit" type="submit"></button>
+				</div>
+			</form>
+			<div class="row justify-content-center text-left my-2">
+				<div class="col-10 col-lg-8 col-xl-7 my-4 submitButton">
+					
+<div class="center pad">
+	<button id="submitBtn" class="showbutton" onclick="landSubmit()">Get your Gift Card</button>
+</div>
+				</div>
+			</div>
+			</div>
+			<div class="col landingPageImg">
+			<img alt="landingPageImage" class="landinPageImage" src="/webresources/tsuk/images/TESCO_CC_DAY1_502.jpg" />
+			</div>
+			</div>
+			</div>
+		<script type="text/javascript">
+			function landSubmit() {
+				if (grecaptcha.getResponse()) {
+					$('#landSubmit').click();
+				} else {
+					$('#bad').removeClass('hidden');
+				}
+			}
+		</script>
+	</body>
+</html>
